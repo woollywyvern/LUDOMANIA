@@ -1,35 +1,59 @@
+//Array of all the symbols
 const symbols = [
     symbol1 = "✖️",
     symbol2 = "💵",
     symbol3 = "💰"
 ]
 
+//Get a random number between 0 and 2
 function getRandomNumber() {
     return Math.floor(Math.random() * 3);
 }
 
+//Gets the HTML element
 function getElement(id) {
     return document.getElementById(id);
 }
 
+//Spins the slot machine
 function spin() {
-    const item1 = getElement('item1');
-    const item2 = getElement('item2');
-    const item3 = getElement('item3');
+    //Disables the button until spinning is over
+    document.getElementById("spinButton").disabled = true;
+    
+    //Gets the Box elements
+    const box1 = getElement('box1');
+    const box2 = getElement('box2');
+    const box3 = getElement('box3');
 
+    //Resets the results to ❓
+    box1.innerHTML = `❓`;
+    box2.innerHTML = `❓`;
+    box3.innerHTML = `❓`;
+
+    //Gets random numbers
     const num1 = getRandomNumber();
     const num2 = getRandomNumber();
     const num3 = getRandomNumber();
 
-    item1.innerHTML = `${symbols[num1]}`;
-    item2.innerHTML = `${symbols[num2]}`;
-    item3.innerHTML = `${symbols[num3]}`;
+    //setTimeout delays each subsequent slot door to emulate a slot machine
+    setTimeout(function(){
+        box1.innerHTML = `${symbols[num1]}`;
+    }, 250);
+    setTimeout(function(){
+        box2.innerHTML = `${symbols[num2]}`;
+    }, 750); 
+    setTimeout(function(){
+        box3.innerHTML = `${symbols[num3]}`;
+        document.getElementById("spinButton").disabled = false;
+    }, 1250); 
 }
 
+//Saves game in a JSON
 var saveGameLoop = window.setInterval(function() {
     localStorage.setItem("ludomaniaSave", JSON.stringify(gameData))
 }, 15000)
 
+//Loads game from a JSON
 var savegame = JSON.parse(localStorage.getItem("ludomaniaSave"))
 if (savegame !== null) {
   gameData = savegame
