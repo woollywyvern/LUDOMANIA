@@ -1,37 +1,43 @@
 //All the gameData and stuff that changes
 var gameData = {
-    money: 1
+    money: 0
 }
 
 //Array of all the symbols
 const symbols = [
-    symbol1 = "✖️",
+    /* symbol1 = "✖️",
     symbol2 = "💵",
-    symbol3 = "💰"
+    symbol3 = "💰" */
 
-    /*
-    symbol1 = {
+    {
+        name: "moneyBag",
+        icon: "💰",
+        chance: 10,
+        value: 5
+    },    
+    {
+        name: "cash",
+        icon: "💵",
+        chance: 30,
+        value: 1
+    },
+    {
         name: "fail",
         icon: "✖️",
-        chance: 100-(symbol2.chance+symbol3.chance)
-    },
-    symbol2 = {
-        name: "fail",
-        icon: "💵",
-        chance: 40
-    },
-    symbol1 = {
-        name: "fail",
-        icon: "💰",
-        chance: 10
+        chance: 0,
+        value: 0
     }
-    */
 ]
 
-//Get a random number between 0 and 2
-function getRandomNumber() {
-    return Math.floor(Math.random() * 3);
-}
+//Gives ✖️ a chance value of 100-sum of the rest of the chances
+symbols[symbols.length - 1].chance = 100 - (symbols[0].chance + symbols[1].chance);
+
+// Calculate the cumulative chances
+let totalChance = 0;
+symbols.forEach((symbol) => {
+    totalChance += symbol.chance;
+    symbol.cumulativeChance = totalChance;
+});
 
 //Gets the HTML element
 function getElement(id) {
@@ -53,29 +59,49 @@ function spin() {
     box2.innerHTML = `❓`;
     box3.innerHTML = `❓`;
 
-    //Gets random numbers
-    const num1 = getRandomNumber();
-    const num2 = getRandomNumber();
-    const num3 = getRandomNumber();
+    // Function to randomize the slot machine box
+    function getRandomSymbol() {
+        const randomNumber = Math.floor(Math.random() * 101); // Generate a random number between 0 and 100
+        let selectedSymbol = symbols[0]; // Default to the first symbol
+    
+        // Determine which symbol the random number corresponds to based on cumulative chances
+        for (let i = 0; i < symbols.length; i++) {
+            if (randomNumber <= symbols[i].cumulativeChance) {
+                selectedSymbol = symbols[i];
+                break;
+            }
+        }
+    
+        return selectedSymbol;
+    }
+
+    //Generates three random symbols for each box
+    const boxResults = [getRandomSymbol(), getRandomSymbol(), getRandomSymbol()]
+    /* const box1Symbol = getRandomSymbol();
+    const box2Symbol = getRandomSymbol();
+    const box3Symbol = getRandomSymbol();*/
 
     //setTimeout delays each subsequent slot door to emulate a slot machine
     setTimeout(function(){
-        box1.innerHTML = `${symbols[num1]}`;
+        box1.innerHTML = boxResults[0].icon;
     }, 250);
     setTimeout(function(){
-        box2.innerHTML = `${symbols[num2]}`;
+        box2.innerHTML = boxResults[1].icon;
     }, 750); 
     setTimeout(function(){
-        box3.innerHTML = `${symbols[num3]}`;
+        box3.innerHTML = boxResults[2].icon;
         document.getElementById("spinButton").disabled = false;
     }, 1250); 
 
     //Gives money based on results of the spin
     setTimeout(function(){
-        
+        for (let i = 0; i < 3; i++ ) {
+            gameData.money += boxResults[i].value; 
+        }
         document.getElementById("money").innerHTML = "Money: " + gameData.money;
     }, 1250); 
 }
+
 
 //Saves game in a JSON
 var saveGameLoop = window.setInterval(function() {
@@ -86,4 +112,11 @@ var saveGameLoop = window.setInterval(function() {
 var savegame = JSON.parse(localStorage.getItem("ludomaniaSave"))
 if (savegame !== null) {
   gameData = savegame
+}
+
+//Updates money value on page loading
+function updateMoney() {
+    if (savegame !== null) {
+        gameData = savegame
+    }
 }
