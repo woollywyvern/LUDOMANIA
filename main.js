@@ -3,12 +3,13 @@ var gameData = {
     money: 0
 }
 
+//Updates the money on load based on the save file
+function updateMoney() {
+    document.getElementById("money").innerHTML = "Money: " + gameData.money;
+}
+
 //Array of all the symbols
 const symbols = [
-    /* symbol1 = "✖️",
-    symbol2 = "💵",
-    symbol3 = "💰" */
-
     {
         name: "moneyBag",
         icon: "💰",
@@ -92,7 +93,7 @@ function spin() {
         box3.innerHTML = boxResults[2].icon;
         document.getElementById("spinButton").disabled = false;
     }, 1250); 
-
+    console.log(gameData.money);
     //Gives money based on results of the spin
     setTimeout(function(){
         for (let i = 0; i < 3; i++ ) {
@@ -112,11 +113,4 @@ var saveGameLoop = window.setInterval(function() {
 var savegame = JSON.parse(localStorage.getItem("ludomaniaSave"))
 if (savegame !== null) {
   gameData = savegame
-}
-
-//Updates money value on page loading
-function updateMoney() {
-    if (savegame !== null) {
-        gameData = savegame
-    }
 }
