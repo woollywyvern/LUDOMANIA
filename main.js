@@ -1,8 +1,31 @@
+//All the gameData and stuff that changes
+var gameData = {
+    money: 1
+}
+
 //Array of all the symbols
 const symbols = [
     symbol1 = "✖️",
     symbol2 = "💵",
     symbol3 = "💰"
+
+    /*
+    symbol1 = {
+        name: "fail",
+        icon: "✖️",
+        chance: 100-(symbol2.chance+symbol3.chance)
+    },
+    symbol2 = {
+        name: "fail",
+        icon: "💵",
+        chance: 40
+    },
+    symbol1 = {
+        name: "fail",
+        icon: "💰",
+        chance: 10
+    }
+    */
 ]
 
 //Get a random number between 0 and 2
@@ -20,7 +43,7 @@ function spin() {
     //Disables the button until spinning is over
     document.getElementById("spinButton").disabled = true;
     
-    //Gets the Box elements
+    //Gets the box elements
     const box1 = getElement('box1');
     const box2 = getElement('box2');
     const box3 = getElement('box3');
@@ -45,6 +68,12 @@ function spin() {
     setTimeout(function(){
         box3.innerHTML = `${symbols[num3]}`;
         document.getElementById("spinButton").disabled = false;
+    }, 1250); 
+
+    //Gives money based on results of the spin
+    setTimeout(function(){
+        
+        document.getElementById("money").innerHTML = "Money: " + gameData.money;
     }, 1250); 
 }
 
