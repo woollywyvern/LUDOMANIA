@@ -1,3 +1,8 @@
+* {
+    font-family: Tahoma, sans-serif;
+    position: relative;
+}
+
 body {
     background-color: #1A1C1D;
     width: 100vw;
@@ -41,6 +46,58 @@ body {
     font-size: 4.5rem;
 }
 
+.plus-value1 {
+    font-size: 45px; /* Adjust the font size as needed */
+    color: rgb(0, 248, 0); /* Adjust the color as needed */
+    position: absolute; /* Set position to absolute */
+    top: 00px; /* Position the plusValue div relative to the top of the result display container */
+    left: 50px; /* Adjust the left position as needed to align the plusValue div with the symbol */
+    margin-bottom: 20px;
+    z-index: 1; /* Set a higher z-index to place the plusValue div on top of the symbol */  
+    font-weight: 600;
+    -webkit-text-stroke: 3px black; /* width and color */
+    opacity: 0; /* Start with the plusValue div hidden */
+    transition: opacity 0.5s; /* Add a transition effect for opacity */
+}
+
+.plus-value2 {
+    font-size: 45px; /* Adjust the font size as needed */
+    color: rgb(0, 248, 0); /* Adjust the color as needed */
+    position: absolute; /* Set position to absolute */
+    top: 00px; /* Position the plusValue div relative to the top of the result display container */
+    left: 150px; /* Adjust the left position as needed to align the plusValue div with the symbol */
+    margin-bottom: 20px;
+    z-index: 1; /* Set a higher z-index to place the plusValue div on top of the symbol */  
+    font-weight: 600;
+    -webkit-text-stroke: 3px black; /* width and color */
+    opacity: 0; /* Start with the plusValue div hidden */
+    transition: opacity 0.5s; /* Add a transition effect for opacity */
+}
+
+.plus-value3 {
+    font-size: 45px; /* Adjust the font size as needed */
+    color: rgb(0, 248, 0); /* Adjust the color as needed */
+    position: absolute; /* Set position to absolute */
+    top: 00px; /* Position the plusValue div relative to the top of the result display container */
+    left: 250px; /* Adjust the left position as needed to align the plusValue div with the symbol */
+    margin-bottom: 20px;
+    z-index: 1; /* Set a higher z-index to place the plusValue div on top of the symbol */  
+    font-weight: 600;
+    -webkit-text-stroke: 3px black; /* width and color */
+    opacity: 0; /* Start with the plusValue div hidden */
+    transition: opacity 0.5s; /* Add a transition effect for opacity */
+}
+
+@keyframes moveUpwards {
+    0% {
+      transform: translateY(0);
+    }
+    100% {
+      transform: translateY(-40px); /* Adjust the distance the plusValue travels upwards */
+      opacity: 0; /* Fade out the plusValue at the topmost position */
+    }
+}
+
 .buttons {
     margin: 1rem 0 2rem 0;
 }
@@ -73,5 +130,4 @@ button {
 
 #money {
     color: white;
-    font-family: Tahoma, sans-serif;
 }

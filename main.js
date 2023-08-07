@@ -78,9 +78,6 @@ function spin() {
 
     //Generates three random symbols for each box
     const boxResults = [getRandomSymbol(), getRandomSymbol(), getRandomSymbol()]
-    /* const box1Symbol = getRandomSymbol();
-    const box2Symbol = getRandomSymbol();
-    const box3Symbol = getRandomSymbol();*/
 
     //setTimeout delays each subsequent slot door to emulate a slot machine
     setTimeout(function(){
@@ -93,13 +90,31 @@ function spin() {
         box3.innerHTML = boxResults[2].icon;
         document.getElementById("spinButton").disabled = false;
     }, 1250); 
-    console.log(gameData.money);
+
     //Gives money based on results of the spin
     setTimeout(function(){
         for (let i = 0; i < 3; i++ ) {
             gameData.money += boxResults[i].value; 
         }
         document.getElementById("money").innerHTML = "Money: " + gameData.money;
+    }, 1250); 
+
+    //Gets the plusValue HTML element 
+    const plusValueElements = [document.getElementById('plusValue1'), document.getElementById('plusValue2'), document.getElementById('plusValue3')]
+
+    //Generates the appropriate plusValues and displays them
+    setTimeout(function(){
+        for (let i = 0; i < 3; i++ ) {
+            if (boxResults[i].value != 0) {
+                plusValueElements[i].innerHTML = '+' + boxResults[i].value; // Show the plusValue div
+                plusValueElements[i].style.opacity = '1'; // Show the plusValue div
+                plusValueElements[i].style.animation = 'moveUpwards 1.2s'; // Apply the moveUpwards animation
+                setTimeout(() => {
+                    plusValueElements[i].style.opacity = '0'; // Hide the plusValue div after 2 seconds
+                    plusValueElements[i].style.animation = 'none'; // Remove the animation
+                }, 1100); // Adjust the time (in milliseconds) for how long the plusValue should be visible
+            }
+        }
     }, 1250); 
 }
 
