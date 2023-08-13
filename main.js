@@ -1,6 +1,7 @@
 //All the gameData and stuff that changes
 var gameData = {
-    money: 0
+    money: 0,
+    spinTime: 250
 }
 
 //Updates the money on load based on the save file
@@ -13,18 +14,21 @@ const symbols = [
     {
         name: "moneyBag",
         icon: "💰",
+        image: 'images/icons/money-bag.png',
         chance: 10,
         value: 5
     },    
     {
         name: "cash",
         icon: "💵",
+        image: 'images/icons/cash.png',
         chance: 30,
         value: 1
     },
     {
         name: "fail",
         icon: "✖️",
+        image: 'images/icons/fail.png',
         chance: 0,
         value: 0
     }
@@ -45,62 +49,65 @@ function getElement(id) {
     return document.getElementById(id);
 }
 
+
+// Function to randomize the slot machine box
+function getRandomSymbol() {
+    const randomNumber = Math.floor(Math.random() * 101); // Generate a random number between 0 and 100
+    let selectedSymbol = symbols[0]; // Default to the first symbol
+
+    // Determine which symbol the random number corresponds to based on cumulative chances
+    for (let i = 0; i < symbols.length; i++) {
+        if (randomNumber <= symbols[i].cumulativeChance) {
+            selectedSymbol = symbols[i];
+            break;
+        }
+    }
+
+    return selectedSymbol;
+}
+
 //Spins the slot machine
 function spin() {
+    gameData.spinTime = 250;
     //Disables the button until spinning is over
-    document.getElementById("spinButton").disabled = true;
+    getElement("spinButton").disabled = true;
     
     //Gets the box elements
-    const box1 = getElement('box1');
-    const box2 = getElement('box2');
-    const box3 = getElement('box3');
+    const box1 = getElement('box1-img');
+    const box2 = getElement('box2-img');
+    const box3 = getElement('box3-img');
 
     //Resets the results to ❓
-    box1.innerHTML = `❓`;
-    box2.innerHTML = `❓`;
-    box3.innerHTML = `❓`;
-
-    // Function to randomize the slot machine box
-    function getRandomSymbol() {
-        const randomNumber = Math.floor(Math.random() * 101); // Generate a random number between 0 and 100
-        let selectedSymbol = symbols[0]; // Default to the first symbol
-    
-        // Determine which symbol the random number corresponds to based on cumulative chances
-        for (let i = 0; i < symbols.length; i++) {
-            if (randomNumber <= symbols[i].cumulativeChance) {
-                selectedSymbol = symbols[i];
-                break;
-            }
-        }
-    
-        return selectedSymbol;
-    }
+    box1.src = 'images/icons/default.png';
+    box2.src = 'images/icons/default.png';
+    box3.src = 'images/icons/default.png';
 
     //Generates three random symbols for each box
     const boxResults = [getRandomSymbol(), getRandomSymbol(), getRandomSymbol()]
 
     //setTimeout delays each subsequent slot door to emulate a slot machine
     setTimeout(function(){
-        box1.innerHTML = boxResults[0].icon;
-    }, 250);
+        box1.src = boxResults[0].image;
+    }, gameData.spinTime);
+    console.log(gameData);
     setTimeout(function(){
-        box2.innerHTML = boxResults[1].icon;
-    }, 750); 
+        box2.src = boxResults[1].image;
+    }, gameData.spinTime*3); 
     setTimeout(function(){
-        box3.innerHTML = boxResults[2].icon;
-        document.getElementById("spinButton").disabled = false;
-    }, 1250); 
+        box3.src = boxResults[2].image;
+        getElement("spinButton").disabled = false;
+    }, gameData.spinTime*5); 
 
     //Gives money based on results of the spin
     setTimeout(function(){
         for (let i = 0; i < 3; i++ ) {
             gameData.money += boxResults[i].value; 
         }
-        document.getElementById("money").innerHTML = "Money: " + gameData.money;
+        getElement("money").innerHTML = "Money: " + gameData.money;
     }, 1250); 
 
     //Gets the plusValue HTML element 
-    const plusValueElements = [document.getElementById('plusValue1'), document.getElementById('plusValue2'), document.getElementById('plusValue3')]
+    const plusValueElements = [getElement('plusValue1'), getElement('plusValue2'), getElement('plusValue3')]
 
     //Generates the appropriate plusValues and displays them
     setTimeout(function(){
@@ -118,14 +125,17 @@ function spin() {
     }, 1250); 
 }
 
-
 //Saves game in a JSON
 var saveGameLoop = window.setInterval(function() {
     localStorage.setItem("ludomaniaSave", JSON.stringify(gameData))
 }, 15000)
 
 //Loads game from a JSON
-var savegame = JSON.parse(localStorage.getItem("ludomaniaSave"))
-if (savegame !== null) {
-  gameData = savegame
+var saveGame = JSON.parse(localStorage.getItem("ludomaniaSave"))
+if (saveGame !== null) {
+  gameData = saveGame
+}
+
+function deleteSave() {
+    localStorage.removeItem("ludomaniaSave");
 }
