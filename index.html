@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="styles.css" />
     <title>LUDOMANIA</title>
-    <link rel="icon" type="image/x-icon" src="images/icons2/money-bag.png">
+    <link rel="icon" type="image/x-icon" href="images/icons2/money-bag.png">
 </head>
 
 <script src="main.js" charset="utf-8" type="text/javascript"></script>
@@ -22,7 +22,22 @@
     </div>
 
     <div id="slotMachines">
-        <div class="doors">
+        <div id="doors" class="doors">
+            <!-- <div id="tooltip" class="hidden">Tooltip content here</div> -->
+            <div id="tooltip" class="hidden">
+                <table>
+                    <thead>
+                      <tr>
+                        <th>Symbol</th>
+                        <th>Chance</th>
+                        <th>Value</th>
+                      </tr>
+                    </thead>
+                    <tbody id="tooltip-content">
+                      <!-- Table rows will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
             <div class="plus-value1" id="plusValue1">+1</div>
             <div class="door">
                 <div class="boxes">

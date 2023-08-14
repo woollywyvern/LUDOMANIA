@@ -9,6 +9,9 @@ function updateMoney() {
     document.getElementById("money").innerHTML = "Money: " + gameData.money;
 }
 
+//Prevents any images from being draggable
+addEventListener('dragstart',function(e){e.preventDefault()});
+
 //Array of all the symbols
 const symbols = [
     {
@@ -49,6 +52,7 @@ function getElement(id) {
     return document.getElementById(id);
 }
 
+//------------------------------------------------------------------------------------------------------------------------------------------
 
 // Function to randomize the slot machine box
 function getRandomSymbol() {
@@ -85,18 +89,25 @@ function spin() {
     //Generates three random symbols for each box
     const boxResults = [getRandomSymbol(), getRandomSymbol(), getRandomSymbol()]
 
+    console.log('Pre Spin: ' + gameData.spinTime);
+
     //setTimeout delays each subsequent slot door to emulate a slot machine
     setTimeout(function(){
         box1.src = boxResults[0].image;
+        console.log('In Spin 1: ' + gameData.spinTime);
     }, gameData.spinTime);
-    console.log(gameData);
+    console.log('Post Spin 1: ' + gameData.spinTime);
     setTimeout(function(){
         box2.src = boxResults[1].image;
+        console.log('In Spin 2: ' + gameData.spinTime);
     }, gameData.spinTime*3); 
+    console.log('Post Spin 2: ' + gameData.spinTime);
     setTimeout(function(){
         box3.src = boxResults[2].image;
         getElement("spinButton").disabled = false;
+        console.log('In Spin 3: ' + gameData.spinTime);
     }, gameData.spinTime*5); 
+    console.log('Post Spin 3: ' + gameData.spinTime);
 
     //Gives money based on results of the spin
     setTimeout(function(){
@@ -124,6 +135,56 @@ function spin() {
         }
     }, 1250); 
 }
+
+//------------------------------------------------------------------------------------------------------------------------------------------
+
+document.addEventListener('DOMContentLoaded', function() {
+    const doors = document.getElementById('doors');
+    const tooltip = document.getElementById('tooltip');
+    const tooltipContent = document.getElementById('tooltip-content');
+
+    doors.addEventListener('mousemove', (event) => {
+        //Display the images, values, and chances
+        // tooltip.innerHTML = `${symbols[0].icon} → Value: +5 → Chance: ${symbols[0].chance}%`;
+
+        // Show the tooltip
+        tooltip.style.display = 'block';
+
+        // Clear previous content
+        tooltipContent.innerHTML = '';
+
+        // Calculate the position relative to the slot machine container
+        const doorsRect = doors.getBoundingClientRect();
+        const offsetX = event.clientX - doorsRect.left;
+        const offsetY = event.clientY - doorsRect.top;
+
+        // Position the tooltip relative to the mouse cursor
+        tooltip.style.left = offsetX + 20 + 'px';
+        tooltip.style.top = offsetY + -115 + 'px'; // Add a small offset to avoid overlapping the cursor
+
+        // Populate the table with the symbol data
+        symbols.forEach((symbol) => {
+            const row = document.createElement('tr');
+            console.log(symbol.icon)
+            console.log(symbol.chance)
+            console.log(symbol.value)
+            row.innerHTML = `
+                <td>${symbol.icon}</td>
+                <td>${symbol.chance}%</td>
+                <td>${symbol.value}</td>
+            `;
+            tooltipContent.appendChild(row);
+        });
+
+    });
+
+    doors.addEventListener('mouseout', () => {
+        // Hide the tooltip
+        tooltip.style.display = 'none';
+    });
+});
+
+//------------------------------------------------------------------------------------------------------------------------------------------
 
 //Saves game in a JSON
 var saveGameLoop = window.setInterval(function() {
